@@ -1,0 +1,31 @@
+{
+    "appKeys": {
+        "DataKeyBT": 2,
+        "DataKeyBattery": 3,
+        "DataKeyDate": 0,
+        "DataKeyDay": 1,
+        "DataKeySecondHand": 4
+    },
+    "capabilities": [
+        "configurable"
+    ],
+    "companyName": "Xeric Wei",
+    "enableMultiJS": true,
+    "longName": "Yet Another Thin",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "YAThin",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "0fbb4d8c-1267-40fb-bfa9-b26172574843",
+    "versionLabel": "2.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
