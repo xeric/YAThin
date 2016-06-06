@@ -1,10 +1,11 @@
 #include "main_window.h"
 
 #define MARGIN             5
+#define HAND_MARGIN        8
 #define THICKNESS          3
 #define ANIMATION_DELAY    300
 #define ANIMATION_DURATION 1000
-#define HAND_LENGTH_SEC    65
+#define HAND_LENGTH_SEC    60
 #define HAND_LENGTH_MIN    HAND_LENGTH_SEC
 #define HAND_LENGTH_HOUR   (HAND_LENGTH_SEC - 20)
 
@@ -186,8 +187,8 @@ static void draw_proc(Layer *layer, GContext *ctx) {
   GPoint minute_hand_long = make_hand_point(mode_time.minutes, 60, len_min, center);
 
   // Plot shorter overlaid hands
-  len_sec -= (MARGIN + 2);
-  len_min -= (MARGIN + 2);
+  len_sec -= HAND_MARGIN - 7;
+  len_min -= HAND_MARGIN - 7;
   GPoint second_hand_short = make_hand_point(mode_time.seconds, 60, len_sec, center);
   GPoint minute_hand_short = make_hand_point(mode_time.minutes, 60, len_min, center);
 
@@ -208,20 +209,35 @@ static void draw_proc(Layer *layer, GContext *ctx) {
   };
 
   // Shorter hour overlay
-  len_hour -= (MARGIN + 2);
+  len_hour -= HAND_MARGIN - 7;
   GPoint hour_hand_short = (GPoint) {
     .x = (int16_t)(sin_lookup(hour_angle) * (int32_t)len_hour / TRIG_MAX_RATIO) + center.x,
     .y = (int16_t)(-cos_lookup(hour_angle) * (int32_t)len_hour / TRIG_MAX_RATIO) + center.y,
   };
 
-  // Draw hands
+  //create additional hand for minute and hours ===============================================
+  GPoint min_hand_center = make_hand_point(mode_time.minutes, 60, -HAND_MARGIN, center);
+  GPoint hour_hand_center = (GPoint) {
+    .x = center.x - (int16_t)(sin_lookup(hour_angle) * (int32_t)HAND_MARGIN / TRIG_MAX_RATIO),
+    .y = center.y - (int16_t)(-cos_lookup(hour_angle) * (int32_t)HAND_MARGIN / TRIG_MAX_RATIO),
+  };
+  
+  // Draw minute hands
   graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorLightGray, GColorWhite));
   for(int y = 0; y < THICKNESS; y++) {
     for(int x = 0; x < THICKNESS; x++) {
-      graphics_draw_line(ctx, GPoint(center.x + x, center.y + y), GPoint(minute_hand_short.x + x, minute_hand_short.y + y));
-      graphics_draw_line(ctx, GPoint(center.x + x, center.y + y), GPoint(hour_hand_short.x + x, hour_hand_short.y + y));
+      graphics_draw_line(ctx, GPoint(min_hand_center.x + x, min_hand_center.y + y), GPoint(minute_hand_short.x + x, minute_hand_short.y + y));
     }
   }
+  
+  //Draw hour hands
+  graphics_context_set_stroke_color(ctx, PBL_IF_COLOR_ELSE(GColorRed, GColorWhite));
+  for(int y = 0; y < THICKNESS; y++) {
+    for(int x = 0; x < THICKNESS; x++) {
+      graphics_draw_line(ctx, GPoint(hour_hand_center.x + x, hour_hand_center.y + y), GPoint(hour_hand_short.x + x, hour_hand_short.y + y));
+    }
+  }
+
   graphics_context_set_stroke_color(ctx, GColorWhite);
   for(int y = 0; y < THICKNESS; y++) {
     for(int x = 0; x < THICKNESS; x++) {
