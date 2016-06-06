@@ -14,7 +14,15 @@
     "longName": "Yet Another Thin",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/WATCHFACE_ICON",
+                "menuIcon": true,
+                "name": "IMAGE_WATCHFACE_ICON",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "YAThin",
